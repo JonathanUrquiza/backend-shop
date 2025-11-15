@@ -1,0 +1,13 @@
+# del proceso de servidor, va a leer este archivo .env y se lleva el puerto  
+ 
+     DB_HOST =mysql-funkotest.alwaysdata.net
+     DB_USER=funkotest
+     DB_PASS=rootJonas
+     DB_NAME=funkotest_funkos  
+
+
+#SESSIONS
+SESSION_NAME=user_session
+
+#SECRET
+SECRET=secretwordispepe 
