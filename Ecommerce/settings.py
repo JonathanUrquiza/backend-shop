@@ -79,20 +79,31 @@ WSGI_APPLICATION = 'Ecommerce.wsgi.application'
 # Base de datos
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': config('DB_NAME', default='funkotest_funkos'),
-        'USER': config('DB_USER', default='funkotest'),
-        'PASSWORD': config('DB_PASS', default=''),
-        'HOST': config('DB_HOST', default='mysql-funkotest.alwaysdata.net'),
-        'PORT': config('DB_PORT', default='3306'),
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            'charset': 'utf8mb4',
-        },
+import sys
+
+# Configuración de base de datos para tests (usa SQLite en memoria)
+if 'test' in sys.argv or 'test_coverage' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': config('DB_NAME', default='funkotest_funkos'),
+            'USER': config('DB_USER', default='funkotest'),
+            'PASSWORD': config('DB_PASS', default=''),
+            'HOST': config('DB_HOST', default='mysql-funkotest.alwaysdata.net'),
+            'PORT': config('DB_PORT', default='3306'),
+            'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+                'charset': 'utf8mb4',
+            },
+        }
+    }
 
 
 # Validación de contraseñas

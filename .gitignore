@@ -49,3 +49,21 @@ db.sqlite3-journal
 .DS_Store
 Thumbs.db
 
+# Archivos de datos temporales
+*.txt
+!requirements.txt
+data.txt
+
+# Archivos de ejecución y pruebas (mantener estructura pero no contenido sensible)
+ejecuciones/*.py
+ejecuciones/*.json
+ejecuciones/*.log
+
+# Archivos de configuración local
+*.local
+local_settings.py
+
+# Archivos de backup
+*.bak
+*.backup
+*~
