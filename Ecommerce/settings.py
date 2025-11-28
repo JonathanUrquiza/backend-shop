@@ -46,12 +46,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',  # Para permitir CORS desde cualquier frontend
     'totalisting',  # App para listado de productos
     'useraccount',  # App para autenticación y registro de usuarios
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # Debe estar antes de otros middlewares
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Para servir archivos estáticos en Render
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -156,3 +158,42 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ============================================================================
+# Configuración de CORS (Cross-Origin Resource Sharing)
+# ============================================================================
+# Configurado para permitir acceso desde cualquier frontend (proyecto educativo)
+
+# Permitir CORS desde cualquier origen (solo para proyectos educativos)
+CORS_ALLOW_ALL_ORIGINS = True
+
+# Métodos HTTP permitidos
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+# Headers permitidos
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+# Permitir credenciales (cookies, headers de autenticación)
+CORS_ALLOW_CREDENTIALS = True
+
+# ⚠️ NOTA DE SEGURIDAD:
+# CORS_ALLOW_ALL_ORIGINS = True permite acceso desde cualquier dominio.
+# Esto es adecuado para proyectos educativos, pero NO para producción.
+# En producción, usa CORS_ALLOWED_ORIGINS con dominios específicos.
