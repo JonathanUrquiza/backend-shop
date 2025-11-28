@@ -28,9 +28,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-!6-_+el9_oulfxq1pw8r8&ey!d3jk&*c$$_6)8^5r6n62n%vwx')
 
 # ADVERTENCIA DE SEGURIDAD: ¡no ejecutar con debug activado en producción!
-DEBUG = True
+DEBUG = config('DEBUG', default='False') == 'True'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.2.5', '192.168.0.15']
+# ALLOWED_HOSTS para producción (Render)
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    default='localhost,127.0.0.1,192.168.2.5,192.168.0.15'
+).split(',')
 
 
 # Definición de aplicaciones
@@ -48,6 +52,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Para servir archivos estáticos en Render
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -140,7 +145,12 @@ USE_TZ = True
 # Archivos estáticos (CSS, JavaScript, Imágenes)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = str(BASE_DIR / 'staticfiles')  # Convertir a string para compatibilidad
+
+# Configuración de WhiteNoise para servir archivos estáticos en producción
+# Usar CompressedStaticFilesStorage si hay problemas con Manifest
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Tipo de campo de clave primaria por defecto
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

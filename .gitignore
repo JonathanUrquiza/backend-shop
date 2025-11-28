@@ -59,6 +59,9 @@ ejecuciones/*.py
 ejecuciones/*.json
 ejecuciones/*.log
 
+# Archivos estáticos recolectados (se generan en producción)
+staticfiles/
+
 # Archivos de configuración local
 *.local
 local_settings.py
