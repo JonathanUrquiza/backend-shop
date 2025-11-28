@@ -8,15 +8,24 @@
 ```
 bash: line 1: ./build.sh: No such file or directory
 bash: line 1: o: command not found
+bash: line 1: Building: command not found
 ```
 
-**Causa:** El Build Command en Render tiene comillas y caracteres extraños.
+**Causa:** El Build Command en Render tiene comillas invertidas (`), caracteres especiales y formato incorrecto.
 
 **Solución:** 
-En Render, configura el Build Command así (SIN comillas extra):
+En Render, ve a **Settings** → **Build Command** y reemplaza TODO el contenido con esto (SIN comillas, SIN caracteres especiales):
+
 ```
 pip install -r requirements.txt && python manage.py collectstatic --no-input
 ```
+
+**⚠️ IMPORTANTE:**
+- Borra completamente el contenido actual del Build Command
+- Pega exactamente el comando de arriba
+- NO uses comillas (` o `)
+- NO uses "o" como separador
+- Guarda los cambios
 
 O si prefieres usar el script build.sh:
 ```
