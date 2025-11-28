@@ -54,10 +54,8 @@ Thumbs.db
 !requirements.txt
 data.txt
 
-# Archivos de ejecución y pruebas (mantener estructura pero no contenido sensible)
-ejecuciones/*.py
-ejecuciones/*.json
-ejecuciones/*.log
+# Carpeta de ejecuciones (completa)
+ejecuciones/
 
 # Archivos estáticos recolectados (se generan en producción)
 staticfiles/
