@@ -26,6 +26,7 @@ class CategorySerializer:
             'category_id': category.category_id,
             'category_name': category.category_name,
             'category_description': category.category_description or '',
+            'image_category': category.image_category or '',
         }
     
     @staticmethod

@@ -31,12 +31,11 @@ class ProductSerializer:
             'stock': product.stock,
             'discount': product.discount or 0,
             'sku': product.sku,
+            'image_front': product.image_front or '',
+            'image_back': product.image_back or '',
         }
         
         if include_relations:
-            data['image_front'] = product.image_front or ''
-            data['image_back'] = product.image_back or ''
-            
             if hasattr(product, 'licence') and product.licence:
                 data['licence'] = {
                     'licence_id': product.licence.licence_id,

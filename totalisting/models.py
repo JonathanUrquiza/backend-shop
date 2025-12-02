@@ -6,6 +6,7 @@ class Category(models.Model):
     category_id = models.AutoField(primary_key=True)
     category_name = models.CharField(max_length=100)
     category_description = models.CharField(max_length=255, blank=True, null=True)
+    image_category = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False  # Las tablas ya existen en la BD
