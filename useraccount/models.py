@@ -9,6 +9,7 @@ class User(models.Model):
     email = models.CharField(max_length=255)
     password = models.CharField(max_length=32)
     create_time = models.DateTimeField(blank=True, null=True)
+    role_id = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False  # Las tablas ya existen en la BD

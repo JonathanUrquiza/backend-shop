@@ -39,6 +39,38 @@ class CategoryService:
         return CategorySerializer.to_dict_list(categories)
     
     @staticmethod
+    def create_category(data: Dict[str, Any]) -> tuple[Optional[Category], Optional[str]]:
+        """
+        Crea una nueva categoría.
+        
+        Args:
+            data: Diccionario con los datos de la categoría
+            
+        Returns:
+            Tupla (categoría_creada, mensaje_error)
+        """
+        category_name = data.get('category_name')
+        if not category_name:
+            return None, 'El nombre de la categoría es obligatorio'
+        
+        # Verificar si ya existe
+        existing = CategoryRepository.get_by_name(category_name)
+        if existing:
+            return None, f'La categoría "{category_name}" ya existe'
+        
+        try:
+            category = CategoryRepository.get_or_create(
+                category_name,
+                defaults={
+                    'category_description': data.get('category_description', ''),
+                    'image_category': data.get('image_category', '')
+                }
+            )[0]
+            return category, None
+        except Exception as e:
+            return None, f'Error al crear la categoría: {str(e)}'
+    
+    @staticmethod
     def update_category(category_id: int, data: Dict[str, Any]) -> tuple[Optional[Category], Optional[str]]:
         """
         Actualiza una categoría existente.
@@ -59,6 +91,8 @@ class CategoryService:
             update_data['category_name'] = data['category_name']
         if 'category_description' in data:
             update_data['category_description'] = data.get('category_description', '')
+        if 'image_category' in data:
+            update_data['image_category'] = data.get('image_category', '')
         
         try:
             updated_category = CategoryRepository.update(category, **update_data)

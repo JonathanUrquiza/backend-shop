@@ -167,8 +167,8 @@ class ProductService:
         # Preparar datos para actualización
         update_data = {}
         fields_to_update = ['product_name', 'product_description', 'price', 'stock', 
-                          'discount', 'sku', 'image_front', 'image_back', 'dues', 'created_by', 
-                          'licence', 'category']
+                          'discount', 'sku', 'image_front', 'image_back', 'additional_images', 
+                          'dues', 'created_by', 'licence', 'category']
         
         for field in fields_to_update:
             if field in data:
@@ -176,6 +176,12 @@ class ProductService:
                     update_data[field] = float(data[field])
                 elif field in ['stock', 'discount', 'dues', 'created_by']:
                     update_data[field] = int(data[field]) if data[field] else None
+                elif field == 'additional_images':
+                    # Manejar additional_images que puede venir como JSON string o lista
+                    from ..serializers.product_serializer import _parse_additional_images
+                    parsed = _parse_additional_images(data[field])
+                    if parsed:
+                        update_data[field] = parsed
                 else:
                     update_data[field] = data[field]
         

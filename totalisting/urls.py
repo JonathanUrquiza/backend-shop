@@ -6,6 +6,8 @@ urlpatterns = [
     # CREATE - Rutas para crear nuevos registros
     # ========================================================================
     path('product/create/', views.new_product_in_DB, name='new_product_in_DB'),
+    path('category/create/', views.create_category, name='create_category'),
+    path('licence/create/', views.create_licence, name='create_licence'),
     
     # ========================================================================
     # READ - Rutas para leer/consultar registros

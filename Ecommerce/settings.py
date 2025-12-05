@@ -12,10 +12,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from decouple import config
-import pymysql
-
-# Configurar PyMySQL para que Django lo use como driver MySQL
-pymysql.install_as_MySQLdb()
 
 # Construir rutas dentro del proyecto así: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -97,18 +93,11 @@ if 'test' in sys.argv or 'test_coverage' in sys.argv:
         }
     }
 else:
+    # Configuración de base de datos SQLite3
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': config('DB_NAME', default='funkotest_funkos'),
-            'USER': config('DB_USER', default='funkotest'),
-            'PASSWORD': config('DB_PASS', default=''),
-            'HOST': config('DB_HOST', default='mysql-funkotest.alwaysdata.net'),
-            'PORT': config('DB_PORT', default='3306'),
-            'OPTIONS': {
-                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-                'charset': 'utf8mb4',
-            },
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 
@@ -149,6 +138,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = str(BASE_DIR / 'staticfiles')  # Convertir a string para compatibilidad
+
+# Configuración de archivos multimedia (imágenes subidas)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Configuración de WhiteNoise para servir archivos estáticos en producción
 # Usar CompressedStaticFilesStorage si hay problemas con Manifest

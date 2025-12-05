@@ -48,6 +48,7 @@ class Product(models.Model):
     created_by = models.IntegerField()
     image_front = models.CharField(max_length=200)
     image_back = models.CharField(max_length=200)
+    additional_images = models.TextField(blank=True, null=True)  # JSON array de imágenes adicionales
     create_time = models.DateTimeField(blank=True, null=True)
     licence = models.ForeignKey(Licence, on_delete=models.DO_NOTHING, db_column='licence_id')
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, db_column='category_id')

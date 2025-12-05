@@ -39,39 +39,58 @@ class ProductFactory:
         if ProductRepository.sku_exists(validated_data['sku']):
             return None, f"El SKU '{validated_data['sku']}' ya existe en la base de datos", {}
         
-        # Obtener o crear la licencia
-        licence_obj, licence_created = LicenceRepository.get_or_create(
-            validated_data['licence_name'],
-            defaults={
-                'licence_description': data.get('licence_description', f'Licencia {validated_data["licence_name"]}'),
-                'licence_image': data.get('licence_image', '')
-            }
-        )
+        # Obtener licencia por ID o nombre
+        if validated_data.get('licence_id'):
+            licence_obj = LicenceRepository.get_by_id(validated_data['licence_id'])
+            if not licence_obj:
+                return None, f'Licencia con ID {validated_data["licence_id"]} no encontrada', {}
+            licence_created = False
+        else:
+            licence_obj, licence_created = LicenceRepository.get_or_create(
+                validated_data['licence_name'],
+                defaults={
+                    'licence_description': data.get('licence_description', f'Licencia {validated_data["licence_name"]}'),
+                    'licence_image': data.get('licence_image', '')
+                }
+            )
         
-        # Obtener o crear la categoría
-        category_obj, category_created = CategoryRepository.get_or_create(
-            validated_data['category_name'],
-            defaults={
-                'category_description': data.get('category_description', f'Categoría {validated_data["category_name"]}')
-            }
-        )
+        # Obtener categoría por ID o nombre
+        if validated_data.get('category_id'):
+            category_obj = CategoryRepository.get_by_id(validated_data['category_id'])
+            if not category_obj:
+                return None, f'Categoría con ID {validated_data["category_id"]} no encontrada', {}
+            category_created = False
+        else:
+            category_obj, category_created = CategoryRepository.get_or_create(
+                validated_data['category_name'],
+                defaults={
+                    'category_description': data.get('category_description', f'Categoría {validated_data["category_name"]}'),
+                    'image_category': data.get('image_category', '')
+                }
+            )
         
         # Crear el producto
         try:
-            product = ProductRepository.create(
-                product_name=validated_data['product_name'],
-                product_description=validated_data['product_description'],
-                price=validated_data['price'],
-                stock=validated_data['stock'],
-                discount=validated_data['discount'],
-                sku=validated_data['sku'],
-                dues=validated_data['dues'],
-                created_by=validated_data['created_by'],
-                image_front=validated_data['image_front'],
-                image_back=validated_data['image_back'],
-                licence=licence_obj,
-                category=category_obj,
-            )
+            create_kwargs = {
+                'product_name': validated_data['product_name'],
+                'product_description': validated_data['product_description'],
+                'price': validated_data['price'],
+                'stock': validated_data['stock'],
+                'discount': validated_data['discount'],
+                'sku': validated_data['sku'],
+                'dues': validated_data['dues'],
+                'created_by': validated_data['created_by'],
+                'image_front': validated_data['image_front'],
+                'image_back': validated_data['image_back'],
+                'licence': licence_obj,
+                'category': category_obj,
+            }
+            
+            # Agregar imágenes adicionales si existen
+            if validated_data.get('additional_images'):
+                create_kwargs['additional_images'] = validated_data['additional_images']
+            
+            product = ProductRepository.create(**create_kwargs)
             
             metadata = {
                 'licence': {

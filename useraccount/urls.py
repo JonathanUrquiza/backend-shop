@@ -15,5 +15,11 @@ urlpatterns = [
     path('profile/change-background/', views.user_profile_change_background, name='user_profile_change_background'),
     path('profile/change-theme/', views.user_profile_change_theme, name='user_profile_change_theme'),
     path('profile/change-language/', views.user_profile_change_language, name='user_profile_change_language'),
+    # CRUD de usuarios (solo admin)
+    path('list/', views.user_list, name='user_list'),
+    path('create/', views.user_create, name='user_create'),
+    path('update/<int:user_id>/', views.user_update, name='user_update'),
+    path('delete/<int:user_id>/', views.user_delete, name='user_delete'),
+    path('roles/', views.role_list, name='role_list'),
 ]
 

@@ -39,6 +39,38 @@ class LicenceService:
         return LicenceSerializer.to_dict_list(licences)
     
     @staticmethod
+    def create_licence(data: Dict[str, Any]) -> tuple[Optional[Licence], Optional[str]]:
+        """
+        Crea una nueva licencia.
+        
+        Args:
+            data: Diccionario con los datos de la licencia
+            
+        Returns:
+            Tupla (licencia_creada, mensaje_error)
+        """
+        licence_name = data.get('licence_name')
+        if not licence_name:
+            return None, 'El nombre de la licencia es obligatorio'
+        
+        # Verificar si ya existe
+        existing_list = LicenceRepository.get_by_name(licence_name)
+        if existing_list:
+            return None, f'La licencia "{licence_name}" ya existe'
+        
+        try:
+            licence = LicenceRepository.get_or_create(
+                licence_name,
+                defaults={
+                    'licence_description': data.get('licence_description', ''),
+                    'licence_image': data.get('licence_image', '')
+                }
+            )[0]
+            return licence, None
+        except Exception as e:
+            return None, f'Error al crear la licencia: {str(e)}'
+    
+    @staticmethod
     def update_licence(licence_id: int, data: Dict[str, Any]) -> tuple[Optional[Licence], Optional[str]]:
         """
         Actualiza una licencia existente.
